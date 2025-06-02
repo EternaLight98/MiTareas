@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiTareas - Gestión de Tareas Personales</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Pantalla de Login/Registro -->
+    <div id="auth-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>MiTareas</h1>
+                <p>Gestión de Tareas Personales</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button id="login-tab" class="auth-tab active" data-tab="login">Iniciar Sesión</button>
+                <button id="register-tab" class="auth-tab" data-tab="register">Registrarse</button>
+            </div>
+
+            <!-- Formulario de Login -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username" class="form-label">Nombre de Usuario</label>
+                    <input type="text" id="login-username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password" class="form-label">Contraseña</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Iniciar Sesión</button>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-username" class="form-label">Nombre de Usuario</label>
+                    <input type="text" id="register-username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password" class="form-label">Contraseña</label>
+                    <input type="password" id="register-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Registrarse</button>
+            </form>
+
+            <div id="auth-message" class="auth-message"></div>
+        </div>
+    </div>
+
+    <!-- Dashboard Principal -->
+    <div id="dashboard-screen" class="screen hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-left">
+                        <h1>MiTareas</h1>
+                        <span id="user-greeting" class="user-greeting"></span>
+                    </div>
+                    <button id="logout-btn" class="btn btn--outline">Cerrar Sesión</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="container">
+                <!-- Task Controls -->
+                <div class="task-controls">
+                    <div class="task-stats">
+                        <div class="stat-card">
+                            <span class="stat-number" id="pending-count">0</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="completed-count">0</span>
+                            <span class="stat-label">Completadas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-actions">
+                        <button id="new-task-btn" class="btn btn--primary">Nueva Tarea</button>
+                        <select id="filter-status" class="form-control filter-select">
+                            <option value="all">Todas las tareas</option>
+                            <option value="pendiente">Pendientes</option>
+                            <option value="finalizada">Completadas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Task List -->
+                <div class="task-list-container">
+                    <div id="task-list" class="task-list"></div>
+                    <div id="empty-state" class="empty-state hidden">
+                        <h3>No tienes tareas aún</h3>
+                        <p>Crea tu primera tarea para comenzar a organizarte</p>
+                        <button class="btn btn--primary" onclick="showTaskModal()">Crear Primera Tarea</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Tarea -->
+    <div id="task-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideTaskModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nueva Tarea</h3>
+                <button class="modal-close" onclick="hideTaskModal()">&times;</button>
+            </div>
+            <form id="task-form" class="modal-body">
+                <input type="hidden" id="task-id">
+                <div class="form-group">
+                    <label for="task-title" class="form-label">Título *</label>
+                    <input type="text" id="task-title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-description" class="form-label">Descripción</label>
+                    <textarea id="task-description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-due-date" class="form-label">Fecha Límite</label>
+                    <input type="date" id="task-due-date" class="form-control">
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--outline" onclick="hideTaskModal()">Cancelar</button>
+                <button type="submit" form="task-form" class="btn btn--primary" id="save-task-btn">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideConfirmModal()"></div>
+        <div class="modal-content modal-content--small">
+            <div class="modal-header">
+                <h3>Confirmar Acción</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">¿Estás seguro de que deseas realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--outline" onclick="hideConfirmModal()">Cancelar</button>
+                <button type="button" class="btn btn--primary" id="confirm-action-btn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

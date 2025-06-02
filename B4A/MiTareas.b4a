@@ -1,0 +1,203 @@
+﻿Build1=Default,b4a.example
+File1=cars-spritesheet.png
+File2=click.mp3
+File3=gamelayout.bal
+File4=hello world with background.json
+File5=Login.bal
+File6=Main.bal
+File7=spritesheet.png
+File8=Tareas.bal
+FileGroup1=Default Group
+FileGroup2=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
+FileGroup5=Default Group
+FileGroup6=Default Group
+FileGroup7=Default Group
+FileGroup8=Default Group
+Group=Default Group
+Library1=accessibility
+Library10=b4xpages
+Library11=b4xpreferencesdialog
+Library12=b4xtable
+Library13=b4xturtle
+Library14=bctextengine
+Library15=bctoast
+Library16=bitmapcreator
+Library17=ble2
+Library18=byteconverter
+Library19=camera
+Library2=administrator
+Library20=camera2
+Library21=contentresolver
+Library22=core
+Library23=dateutils
+Library24=designerutils
+Library25=fileprovider
+Library26=firebaseadmob2
+Library27=firebaseanalytics
+Library28=firebaseauth
+Library29=firebasenotifications
+Library3=animation
+Library30=firebasestorage
+Library31=gameview
+Library32=gestures
+Library33=googleplaybilling
+Library34=gps
+Library35=ime
+Library36=javaobject
+Library37=json
+Library38=keyvaluestore
+Library39=keyvaluestore2
+Library4=appcompat
+Library40=livewallpaper
+Library41=mediachooser
+Library42=nb6
+Library43=network
+Library44=nfc
+Library45=okhttp
+Library46=okhttputils2
+Library47=phone
+Library48=preferenceactivity
+Library49=preoptimizedclv
+Library5=audio
+Library50=randomaccessfile
+Library51=reflection
+Library52=runtimepermissions
+Library53=serial
+Library54=simplemediamanager
+Library55=sip
+Library56=sql
+Library57=stringutils
+Library58=tabstripviewpager
+Library59=tts
+Library6=b4xcollections
+Library60=usb
+Library61=viewsex
+Library62=x2
+Library63=xml2map
+Library64=xmlbuilder
+Library65=xmlsax
+Library66=xui
+Library67=xui views
+Library68=xui2d
+Library69=xcustomlistview
+Library7=b4xdrawer
+Library8=b4xencryption
+Library9=b4xformatter
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.LightTheme)~\n~'End of default text.~\n~SetActivityAttribute(Main, android:configChanges, orientation|screenSize)
+Module1=|relative|..\B4XMainPage
+Module2=DatabaseHelper
+Module3=|relative|..\Game
+Module4=Login
+Module5=Starter
+Module6=Tareas
+NumberOfFiles=8
+NumberOfLibraries=69
+NumberOfModules=6
+Version=13.1
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Hello World
+	#VersionCode: 1
+	#VersionName: 
+	#SupportedOrientations: sensorLandscape
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: True
+	#IncludeTitle: false
+#End Region
+
+#BridgeLogger: True
+Sub Process_Globals
+	Public ActionBarHomeClicked As Boolean
+End Sub
+
+Sub Globals
+
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	SetImmersiveMode
+	Dim pm As B4XPagesManager
+	pm.Initialize(Activity)
+End Sub
+
+Private Sub SetImmersiveMode
+	Activity_WindowFocusChanged(True)
+	Dim lv As LayoutValues = GetRealSize
+	Dim jo As JavaObject = Activity
+	jo.RunMethod("setBottom", Array(lv.Height))
+	jo.RunMethod("setRight", Array(lv.Width))
+	Activity.Height = lv.Height
+	Activity.Width = lv.Width
+End Sub
+
+Sub GetRealSize As LayoutValues
+	Dim lv As LayoutValues
+	Dim ctxt As JavaObject
+	ctxt.InitializeContext
+	Dim display As JavaObject = ctxt.RunMethodJO("getSystemService", Array("window")).RunMethod("getDefaultDisplay", Null)
+	Dim point As JavaObject
+	point.InitializeNewInstance("android.graphics.Point", Null)
+	display.RunMethod("getRealSize", Array(point))
+	lv.Width = point.GetField("x")
+	lv.Height = point.GetField("y")
+	lv.Scale = 100dip / 100
+	Return lv
+End Sub
+
+Sub Activity_WindowFocusChanged(HasFocus As Boolean)
+	If HasFocus Then
+		Try
+			Dim jo As JavaObject = Activity
+			Sleep(300)
+			jo.RunMethod("setSystemUiVisibility", Array As Object(5894)) '3846 - non-sticky
+		Catch
+			'Log(LastException) 'This can cause another error
+		End Try 'ignore
+		
+	End If
+End Sub
+
+'Template version: B4A-1.01
+#Region Delegates
+
+Sub Activity_ActionBarHomeClick
+	ActionBarHomeClicked = True
+	B4XPages.Delegate.Activity_ActionBarHomeClick
+	ActionBarHomeClicked = False
+End Sub
+
+Sub Activity_KeyPress (KeyCode As Int) As Boolean
+	Return B4XPages.Delegate.Activity_KeyPress(KeyCode)
+End Sub
+
+Sub Activity_Resume
+	B4XPages.Delegate.Activity_Resume
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	B4XPages.Delegate.Activity_Pause
+End Sub
+
+Sub Activity_PermissionResult (Permission As String, Result As Boolean)
+	B4XPages.Delegate.Activity_PermissionResult(Permission, Result)
+End Sub
+
+Sub Create_Menu (Menu As Object)
+	B4XPages.Delegate.Create_Menu(Menu)
+End Sub
+
+#if Java
+public boolean _onCreateOptionsMenu(android.view.Menu menu) {
+	 processBA.raiseEvent(null, "create_menu", menu);
+	 return true;
+	
+}
+#End If
+#End Region
+
+'Program code should go into B4XMainPage and other pages.
